@@ -6,7 +6,7 @@ public class Main {
         // 1. Создание векторов
         System.out.println("\n1. Создание векторов:");
         Vector v1 = new Vector(3);
-        System.out.println("Пустой Vector v1 (длина 3): " + v1);
+        System.out.println("Пустой Vector v1: " + v1);
 
         v1.set(0, 1.0);
         v1.set(1, 2.0);
