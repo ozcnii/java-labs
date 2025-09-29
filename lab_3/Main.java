@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
-import lab_3.exceptions.*;
+import lab_3.exceptions.EmptyCollectionException;
+import lab_3.exceptions.InvalidTrackDataException;
 
 public class Main {
 
