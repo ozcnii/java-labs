@@ -16,7 +16,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите количество музыкальных коллекций для создания: ");
         int size = scanner.nextInt();
-        scanner.nextLine(); // Поглощаем символ новой строки
+        scanner.nextLine();
 
         MusicCollection[] collections = new MusicCollection[size];
 
@@ -57,7 +57,6 @@ public class Main {
             }
         }
 
-        // Удаляем null элементы, если они появились из-за ошибок
         collections = Arrays.stream(collections).filter(Objects::nonNull).toArray(MusicCollection[]::new);
 
         // 2. Вывод полной информации
