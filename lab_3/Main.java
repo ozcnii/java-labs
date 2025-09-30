@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
-
 import lab_3.exceptions.EmptyCollectionException;
 import lab_3.exceptions.InvalidTrackDataException;
 

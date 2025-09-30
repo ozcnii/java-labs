@@ -5,7 +5,7 @@ import lab_3.exceptions.EmptyCollectionException;
 public interface MusicCollection {
     String getTitle();
 
-    int getIdentifier(); // Будет возвращать год выпуска для альбома или ID жанра для плейлиста
+    int getIdentifier();
 
     int[] getTracksData();
 

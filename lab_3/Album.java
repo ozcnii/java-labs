@@ -8,25 +8,22 @@ import lab_3.exceptions.InvalidTrackDataException;
 
 public class Album implements MusicCollection {
 
-    private int[] trackDurations; // Длительности треков в секундах
-    private String artistName; // Имя исполнителя
-    private int releaseYear; // Год выпуска
+    private int[] trackDurations;
+    private String artistName;
+    private int releaseYear;
 
-    // Конструктор по умолчанию
     public Album() {
         this.artistName = "Unknown Artist";
         this.releaseYear = 1970;
         this.trackDurations = new int[0];
     }
 
-    // Конструктор с параметрами
     public Album(String artistName, int releaseYear, int[] trackDurations) {
         this.artistName = artistName;
         this.releaseYear = releaseYear;
-        setTracksData(trackDurations); // Используем сеттер для проверки
+        setTracksData(trackDurations);
     }
 
-    // Реализация методов интерфейса
     @Override
     public String getTitle() {
         return artistName;
@@ -39,7 +36,7 @@ public class Album implements MusicCollection {
 
     @Override
     public int[] getTracksData() {
-        return trackDurations.clone(); // Возвращаем копию для инкапсуляции
+        return trackDurations.clone(); // возвращаем копию для инкапсуляции
     }
 
     @Override
@@ -57,7 +54,6 @@ public class Album implements MusicCollection {
         if (tracksData != null) {
             for (int duration : tracksData) {
                 if (duration < 0) {
-                    // Выбрасываем необъявляемое исключение при некорректных данных
                     throw new InvalidTrackDataException("Длительность трека не может быть отрицательной: " + duration);
                 }
             }
@@ -65,28 +61,24 @@ public class Album implements MusicCollection {
         this.trackDurations = tracksData;
     }
 
-    // Реализация бизнес-метода
     @Override
     public double calculateMetric() throws EmptyCollectionException {
         if (trackDurations == null || trackDurations.length == 0) {
-            // Выбрасываем объявляемое исключение, если коллекция пуста
             throw new EmptyCollectionException("Альбом пуст, невозможно рассчитать общую длительность.");
         }
         int totalDuration = 0;
         for (int duration : trackDurations) {
             totalDuration += duration;
         }
-        return totalDuration; // Возвращаем общую длительность в секундах
+        return totalDuration;
     }
 
-    // Переопределение методов класса Object
     @Override
     public String toString() {
         return String.format("Альбом [Исполнитель: %s, Год: %d, Длительности треков (сек): %s]",
                 artistName, releaseYear, Arrays.toString(trackDurations));
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
