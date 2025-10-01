@@ -71,7 +71,12 @@ public class Main {
         for (MusicCollection collection : collections) {
             try {
                 double result = collection.calculateMetric();
-                groups.computeIfAbsent(result, k -> new ArrayList<>()).add(collection);
+                List<MusicCollection> group = groups.get(result);
+                if (group == null) {
+                    group = new ArrayList<>();
+                    groups.put(result, group);
+                }
+                group.add(collection);
             } catch (EmptyCollectionException e) {
                 System.out.println("Предупреждение: " + e.getMessage() + " для объекта: " + collection.getTitle());
             }
