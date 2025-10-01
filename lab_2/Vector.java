@@ -2,7 +2,8 @@ import java.util.Arrays;
 
 public class Vector {
     private final double[] coordinates;
-    private final int size;
+    private final int size; // TODO: лишнее поле!! не понравилось ибо можно получить длину массива
+                            // coordinates.length
 
     public Vector(int size) {
         if (size <= 0) {
@@ -12,6 +13,7 @@ public class Vector {
         this.coordinates = new double[size];
     }
 
+    // TODO: название метода неочень красивое не информативное
     public double get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(
@@ -20,6 +22,7 @@ public class Vector {
         return coordinates[index];
     }
 
+    // TODO: название метода неочень красивое не информативное
     public void set(int index, double value) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(
