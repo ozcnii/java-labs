@@ -75,16 +75,14 @@ public class Main {
         // 7. Умножение вектора на число
         System.out.println("\n7. Умножение вектора на число:");
         double scalar = 2.5;
-        Vector v1Scaled = v1.multiply(scalar);
-        System.out.println("v1 (" + v1 + ") * " + scalar + " = " + v1Scaled);
-        // Ожидаемый результат для v1 (10.0, 2.0, 3.0) * 2.5 = (25.0, 5.0, 7.5)
+        v1.multiply(scalar);
+        System.out.println("v1 (" + v1 + ") * " + scalar + " = " + v1);
+        // (10.0, 2.0, 3.0) * 2.5 = (25.0, 5.0, 7.5)
 
         // 8. Сложение двух векторов (статический метод)
         System.out.println("\n8. Сложение двух векторов:");
         Vector v_sum = Vector.add(v1, v2);
         System.out.println(v1 + " + " + v2 + " = " + v_sum);
-        // Ожидаемый результат:
-        // v1 (10.0, 2.0, 3.0) + v2 (4.0, 5.0, 6.0) = (14.0, 7.0, 9.0)
 
         try {
             Vector.add(v1, v3);
@@ -96,8 +94,7 @@ public class Main {
         System.out.println("\n9. Скалярное произведение двух векторов:");
         double dot_product = Vector.dotProduct(v1, v2);
         System.out.println(v1 + " . " + v2 + " = " + dot_product);
-        // Ожидаемый результат для v1 (10.0, 2.0, 3.0) . v2 (4.0, 5.0, 6.0)
-        // = (10*4) + (2*5) + (3*6) = 40 + 10 + 18 = 68.0
+        // = (25*4) + (5*5) + (7.5*6) = 100 + 25 + 45 = 170
 
         try {
             Vector.dotProduct(v1, v3);

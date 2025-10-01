@@ -65,12 +65,10 @@ public class Vector {
         return Math.sqrt(sumOfSquares);
     }
 
-    public Vector multiply(double scalar) {
-        Vector result = new Vector(this.size);
+    public void multiply(double scalar) {
         for (int i = 0; i < this.size; i++) {
-            result.coordinates[i] = this.coordinates[i] * scalar;
+            coordinates[i] *= scalar;
         }
-        return result;
     }
 
     public static Vector add(Vector v1, Vector v2) {
