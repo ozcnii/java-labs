@@ -1,12 +1,18 @@
-package lab_3;
+package lab_4;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Objects;
 
-import lab_3.exceptions.EmptyCollectionException;
-import lab_3.exceptions.InvalidTrackDataException;
+import lab_4.exceptions.EmptyCollectionException;
+import lab_4.exceptions.InvalidTrackDataException;
 
-public class Album implements MusicCollection {
+public class Album implements MusicCollection, Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int[] trackDurations;
     private String artistName;
@@ -36,7 +42,7 @@ public class Album implements MusicCollection {
 
     @Override
     public int[] getTracksData() {
-        return trackDurations.clone(); // возвращаем копию для инкапсуляции
+        return trackDurations.clone();
     }
 
     @Override
@@ -90,6 +96,38 @@ public class Album implements MusicCollection {
             totalDuration += duration;
         }
         return totalDuration;
+    }
+
+    @Override
+    public void output(OutputStream out) throws IOException {
+        DataOutputStream dos = new DataOutputStream(out);
+
+        dos.writeUTF(artistName != null ? artistName : "");
+        dos.writeInt(releaseYear);
+        dos.writeInt(trackDurations != null ? trackDurations.length : 0);
+        if (trackDurations != null) {
+            for (int duration : trackDurations) {
+                dos.writeInt(duration);
+            }
+        }
+
+        dos.flush();
+    }
+
+    @Override
+    public void write(Writer out) throws IOException {
+        String safeTitle = (artistName != null ? artistName : "Unknown").replace(" ", "_");
+        out.write(safeTitle + " ");
+        out.write(releaseYear + " ");
+        int length = trackDurations != null ? trackDurations.length : 0;
+        out.write(length + " ");
+        if (trackDurations != null) {
+            for (int i = 0; i < trackDurations.length; i++) {
+                out.write(trackDurations[i] + (i < trackDurations.length - 1 ? " " : ""));
+            }
+        }
+        out.write("\n");
+        out.flush();
     }
 
     @Override

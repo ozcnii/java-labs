@@ -1,6 +1,10 @@
-package lab_3;
+package lab_4;
 
-import lab_3.exceptions.EmptyCollectionException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
+
+import lab_4.exceptions.EmptyCollectionException;
 
 public interface MusicCollection {
     String getTitle();
@@ -20,4 +24,8 @@ public interface MusicCollection {
     void setTrackData(int index, int value);
 
     double calculateMetric() throws EmptyCollectionException;
+
+    void output(OutputStream out) throws IOException;
+
+    void write(Writer out) throws IOException;
 }

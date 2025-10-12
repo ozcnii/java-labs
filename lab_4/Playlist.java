@@ -1,12 +1,18 @@
-package lab_3;
+package lab_4;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Objects;
 
-import lab_3.exceptions.EmptyCollectionException;
-import lab_3.exceptions.InvalidTrackDataException;
+import lab_4.exceptions.EmptyCollectionException;
+import lab_4.exceptions.InvalidTrackDataException;
 
-public class Playlist implements MusicCollection {
+public class Playlist implements MusicCollection, Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int[] trackRatings;
     private String playlistTitle;
@@ -54,7 +60,7 @@ public class Playlist implements MusicCollection {
         if (tracksData != null) {
             for (int rating : tracksData) {
                 if (rating < 1 || rating > 5) {
-                    throw new InvalidTrackDataException("  диапазоне от 1 до 5: " + rating);
+                    throw new InvalidTrackDataException("Рейтинг должен быть в диапазоне от 1 до 5: " + rating);
                 }
             }
         }
@@ -90,6 +96,38 @@ public class Playlist implements MusicCollection {
             sum += rating;
         }
         return sum / trackRatings.length;
+    }
+
+    @Override
+    public void output(OutputStream out) throws IOException {
+        DataOutputStream dos = new DataOutputStream(out);
+
+        dos.writeUTF(playlistTitle != null ? playlistTitle : "");
+        dos.writeInt(genreId);
+        dos.writeInt(trackRatings != null ? trackRatings.length : 0);
+        if (trackRatings != null) {
+            for (int rating : trackRatings) {
+                dos.writeInt(rating);
+            }
+        }
+
+        dos.flush();
+    }
+
+    @Override
+    public void write(Writer out) throws IOException {
+        String safeTitle = (playlistTitle != null ? playlistTitle : "Untitled").replace(" ", "_");
+        out.write(safeTitle + " ");
+        out.write(genreId + " ");
+        int length = trackRatings != null ? trackRatings.length : 0;
+        out.write(length + " ");
+        if (trackRatings != null) {
+            for (int i = 0; i < trackRatings.length; i++) {
+                out.write(trackRatings[i] + (i < trackRatings.length - 1 ? " " : ""));
+            }
+        }
+        out.write("\n");
+        out.flush();
     }
 
     @Override
