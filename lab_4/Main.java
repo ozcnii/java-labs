@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,17 +75,14 @@ public class Main {
     }
 
     private static void printMenu() {
-        System.out.println("╔═════════════════════════════════════════════════════╗");
-        System.out.println("║                     МЕНЮ                            ║");
-        System.out.println("╠═════════════════════════════════════════════════════╣");
-        System.out.println("║ 1. Заполнить базу элементов с консоли               ║");
-        System.out.println("║ 2. Тест байтового ввода/вывода                      ║");
-        System.out.println("║ 3. Тест текстового ввода/вывода                     ║");
-        System.out.println("║ 4. Тест сериализации/десериализации                 ║");
-        System.out.println("║ 5. Тест форматного текстового ввода/вывода          ║");
-        System.out.println("║ 6. Показать текущую базу элементов                  ║");
-        System.out.println("║ 0. Выход                                            ║");
-        System.out.println("╚═════════════════════════════════════════════════════╝");
+        System.out.println("Меню:");
+        System.out.println("1. Заполнить базу элементов с консоли");
+        System.out.println("2. Тест байтового ввода/вывода");
+        System.out.println("3. Тест текстового ввода/вывода");
+        System.out.println("4. Тест сериализации/десериализации");
+        System.out.println("5. Тест форматного текстового ввода/вывода");
+        System.out.println("6. Показать текущую базу элементов");
+        System.out.println("0. Выход");
     }
 
     private static void loadExistingData() {
@@ -395,11 +391,11 @@ public class Main {
         try {
             System.out.println("Сериализация в файл " + filename + "...");
             try (FileOutputStream fos = new FileOutputStream(filename);
-                    ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeInt(collections.size());
+                    DataOutputStream dos = new DataOutputStream(fos)) {
+                dos.writeInt(collections.size());
 
                 for (MusicCollection collection : collections) {
-                    oos.writeObject(collection);
+                    MusicCollectionIO.serializeMusicCollection(collection, fos);
                 }
             }
             System.out.println("✓ Сериализация завершена.");
@@ -407,11 +403,11 @@ public class Main {
             System.out.println("Десериализация из файла " + filename + "...");
             List<MusicCollection> readCollections = new ArrayList<>();
             try (FileInputStream fis = new FileInputStream(filename);
-                    ObjectInputStream ois = new ObjectInputStream(fis)) {
-                int count = ois.readInt();
+                    DataInputStream dis = new DataInputStream(fis)) {
+                int count = dis.readInt();
 
                 for (int i = 0; i < count; i++) {
-                    MusicCollection mc = (MusicCollection) ois.readObject();
+                    MusicCollection mc = MusicCollectionIO.deserializeMusicCollection(fis);
                     readCollections.add(mc);
                 }
             }

@@ -1,6 +1,9 @@
 package lab_4;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -70,14 +73,27 @@ public class MusicCollectionIO {
     }
 
     public static void serializeMusicCollection(MusicCollection o, OutputStream out) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(out);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(o);
         oos.flush();
+
+        byte[] data = baos.toByteArray();
+        DataOutputStream dos = new DataOutputStream(out);
+        dos.writeInt(data.length);
+        dos.write(data);
+        dos.flush();
     }
 
     public static MusicCollection deserializeMusicCollection(InputStream in)
             throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(in);
+        DataInputStream dis = new DataInputStream(in);
+        int length = dis.readInt();
+        byte[] data = new byte[length];
+        dis.readFully(data);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(data);
+        ObjectInputStream ois = new ObjectInputStream(bais);
         return (MusicCollection) ois.readObject();
     }
 
