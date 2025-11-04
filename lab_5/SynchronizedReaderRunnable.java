@@ -38,7 +38,5 @@ public class SynchronizedReaderRunnable implements Runnable {
                 break;
             }
         }
-
-        System.out.println("SynchronizedReaderRunnable завершен");
     }
 }

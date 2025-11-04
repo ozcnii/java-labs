@@ -43,7 +43,5 @@ public class SynchronizedWriterRunnable implements Runnable {
                 break;
             }
         }
-
-        System.out.println("SynchronizedWriterRunnable завершен");
     }
 }

@@ -25,7 +25,5 @@ public class WriterThread extends Thread {
             collection.setTrackData(i, value);
             System.out.println("Write: " + value + " to position " + i);
         }
-
-        System.out.println("WriterThread завершен");
     }
 }

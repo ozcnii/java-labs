@@ -19,8 +19,6 @@ public class ReaderThread extends Thread {
             int value = collection.getTrackData(i);
             System.out.println("Read: " + value + " from position " + i);
         }
-        
-        System.out.println("ReaderThread завершен");
     }
 }
 
