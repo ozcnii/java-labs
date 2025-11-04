@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import lab_4.exceptions.EmptyCollectionException;
+import lab_5.exceptions.EmptyCollectionException;
 
 public interface MusicCollection {
     String getTitle();
