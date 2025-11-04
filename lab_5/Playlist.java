@@ -1,4 +1,4 @@
-package lab_4;
+package lab_5;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.Objects;
 
-import lab_4.exceptions.EmptyCollectionException;
-import lab_4.exceptions.InvalidTrackDataException;
+import lab_5.exceptions.EmptyCollectionException;
+import lab_5.exceptions.InvalidTrackDataException;
 
 public class Playlist implements MusicCollection, Serializable {
     private int[] trackRatings;

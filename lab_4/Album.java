@@ -12,8 +12,6 @@ import lab_4.exceptions.EmptyCollectionException;
 import lab_4.exceptions.InvalidTrackDataException;
 
 public class Album implements MusicCollection, Serializable {
-    private static final long serialVersionUID = 1L;
-
     private int[] trackDurations;
     private String artistName;
     private int releaseYear;

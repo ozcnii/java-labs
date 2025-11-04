@@ -1,13 +1,17 @@
 package lab_5;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Objects;
 
 import lab_5.exceptions.EmptyCollectionException;
 import lab_5.exceptions.InvalidTrackDataException;
 
-public class Album implements MusicCollection {
-
+public class Album implements MusicCollection, Serializable {
     private int[] trackDurations;
     private String artistName;
     private int releaseYear;
@@ -93,6 +97,38 @@ public class Album implements MusicCollection {
     }
 
     @Override
+    public void output(OutputStream out) throws IOException {
+        DataOutputStream dos = new DataOutputStream(out);
+
+        dos.writeUTF(artistName != null ? artistName : "");
+        dos.writeInt(releaseYear);
+        dos.writeInt(trackDurations != null ? trackDurations.length : 0);
+        if (trackDurations != null) {
+            for (int duration : trackDurations) {
+                dos.writeInt(duration);
+            }
+        }
+
+        dos.flush();
+    }
+
+    @Override
+    public void write(Writer out) throws IOException {
+        String safeTitle = (artistName != null ? artistName : "Unknown").replace(" ", "_");
+        out.write(safeTitle + " ");
+        out.write(releaseYear + " ");
+        int length = trackDurations != null ? trackDurations.length : 0;
+        out.write(length + " ");
+        if (trackDurations != null) {
+            for (int i = 0; i < trackDurations.length; i++) {
+                out.write(trackDurations[i] + (i < trackDurations.length - 1 ? " " : ""));
+            }
+        }
+        out.write("\n");
+        out.flush();
+    }
+
+    @Override
     public String toString() {
         return String.format("Альбом [Исполнитель: %s, Год: %d, Длительности треков (сек): %s]",
                 artistName, releaseYear, Arrays.toString(trackDurations));
@@ -116,4 +152,3 @@ public class Album implements MusicCollection {
         return result;
     }
 }
-
