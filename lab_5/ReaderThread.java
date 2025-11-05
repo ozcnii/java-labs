@@ -13,12 +13,9 @@ public class ReaderThread extends Thread {
 
     @Override
     public void run() {
-        int[] data = collection.getTracksData();
-        
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < collection.getTracksDataSize(); i++) {
             int value = collection.getTrackData(i);
             System.out.println("Read: " + value + " from position " + i);
         }
     }
 }
-

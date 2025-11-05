@@ -29,6 +29,11 @@ public class Playlist implements MusicCollection, Serializable {
     }
 
     @Override
+    public int getTracksDataSize() {
+        return trackRatings.length;
+    }
+
+    @Override
     public String getTitle() {
         return playlistTitle;
     }

@@ -17,9 +17,7 @@ public class WriterThread extends Thread {
 
     @Override
     public void run() {
-        int[] data = collection.getTracksData();
-
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < collection.getTracksDataSize(); i++) {
             // Генерируем случайное значение от 1 до 1000
             int value = random.nextInt(1000) + 1;
             collection.setTrackData(i, value);

@@ -151,4 +151,9 @@ public class Album implements MusicCollection, Serializable {
         result = 31 * result + Arrays.hashCode(trackDurations);
         return result;
     }
+
+    @Override
+    public int getTracksDataSize() {
+        return trackDurations.length;
+    }
 }

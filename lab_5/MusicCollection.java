@@ -19,6 +19,8 @@ public interface MusicCollection {
 
     void setTracksData(int[] tracksData);
 
+    int getTracksDataSize();
+
     int getTrackData(int index);
 
     void setTrackData(int index, int value);

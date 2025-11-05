@@ -18,6 +18,11 @@ public class SynchronizedMusicCollection implements MusicCollection {
     }
 
     @Override
+    public synchronized int getTracksDataSize() {
+        return delegate.getTracksDataSize();
+    }
+
+    @Override
     public synchronized String getTitle() {
         return delegate.getTitle();
     }
