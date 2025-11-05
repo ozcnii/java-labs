@@ -141,25 +141,27 @@ public class Main {
         System.out.println("Проверка целостности данных:");
 
         // Проверяем, что все данные записаны корректно
-        int[] finalData = syncCollection.getTracksData();
         boolean dataIsConsistent = true;
 
         for (int i = 0; i <= 16; i++) {
-            if (finalData[i] != 100) {
+            if (syncCollection.getTrackData(i) != 100) {
                 dataIsConsistent = false;
-                System.out.println("Ошибка: позиция " + i + " = " + finalData[i] + " (ожидалось 100)");
+                System.out
+                        .println("Ошибка: позиция " + i + " = " + syncCollection.getTrackData(i) + " (ожидалось 100)");
             }
         }
         for (int i = 17; i <= 33; i++) {
-            if (finalData[i] != 200) {
+            if (syncCollection.getTrackData(i) != 200) {
                 dataIsConsistent = false;
-                System.out.println("Ошибка: позиция " + i + " = " + finalData[i] + " (ожидалось 200)");
+                System.out
+                        .println("Ошибка: позиция " + i + " = " + syncCollection.getTrackData(i) + " (ожидалось 200)");
             }
         }
         for (int i = 34; i <= 49; i++) {
-            if (finalData[i] != 300) {
+            if (syncCollection.getTrackData(i) != 300) {
                 dataIsConsistent = false;
-                System.out.println("Ошибка: позиция " + i + " = " + finalData[i] + " (ожидалось 300)");
+                System.out
+                        .println("Ошибка: позиция " + i + " = " + syncCollection.getTrackData(i) + " (ожидалось 300)");
             }
         }
 

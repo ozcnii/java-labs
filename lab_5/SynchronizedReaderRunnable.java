@@ -19,9 +19,7 @@ public class SynchronizedReaderRunnable implements Runnable {
 
     @Override
     public void run() {
-        int[] data = collection.getTracksData();
-
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < collection.getTracksDataSize(); i++) {
             try {
                 // Ждем разрешения на чтение
                 readSemaphore.acquire();
