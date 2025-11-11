@@ -8,15 +8,14 @@ import java.util.Random;
  */
 public class WriterThread extends Thread {
     private MusicCollection collection;
-    private Random random;
 
     public WriterThread(MusicCollection collection) {
         this.collection = collection;
-        this.random = new Random();
     }
 
     @Override
     public void run() {
+        var random = new Random();
         for (int i = 0; i < collection.getTracksDataSize(); i++) {
             // Генерируем случайное значение от 1 до 1000
             int value = random.nextInt(1000) + 1;

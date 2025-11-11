@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class SynchronizedWriterRunnable implements Runnable {
     private MusicCollection collection;
-    private Semaphore writeSemaphore;
+    private Semaphore writeSemaphore; // TODO: использовать один
     private Semaphore readSemaphore;
     private Random random;
 
