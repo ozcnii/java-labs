@@ -150,7 +150,6 @@ public class MusicCollectionIO {
 
     /**
      * Задание 1: метод сортировки массива объектов интерфейсного типа
-     * Использует natural ordering (Comparable)
      */
     public static void sortMusicCollection(MusicCollection[] array) {
         Arrays.sort(array);
