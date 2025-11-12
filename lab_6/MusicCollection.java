@@ -3,7 +3,6 @@ package lab_6;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.util.Iterator;
 
 import lab_6.exceptions.EmptyCollectionException;
 
@@ -33,10 +32,4 @@ public interface MusicCollection extends Comparable<MusicCollection>, Iterable<I
     void output(OutputStream out) throws IOException;
 
     void write(Writer out) throws IOException;
-
-    /**
-     * Задание 3: метод iterator() из интерфейса Iterable
-     */
-    @Override
-    Iterator<Integer> iterator();
 }
