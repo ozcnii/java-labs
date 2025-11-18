@@ -143,7 +143,7 @@ public class Main {
         System.out.println();
 
         System.out.println("\nИтерация с помощью for-each:");
-        for (Integer value : collection) {
+        for (int value : collection) {
             System.out.print(value + " ");
         }
         System.out.println();
