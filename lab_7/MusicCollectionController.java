@@ -1,12 +1,18 @@
 package lab_7;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,9 +23,17 @@ import lab_7.exceptions.InvalidTrackDataException;
 
 public class MusicCollectionController {
     private List<MusicCollection> collections;
+    private File lastLoadedFile;
+    private FileType lastLoadedFileType;
+
+    public enum FileType {
+        BINARY, TEXT, SERIALIZED, FORMATTED, NONE
+    }
 
     public MusicCollectionController() {
         collections = new ArrayList<>();
+        lastLoadedFile = null;
+        lastLoadedFileType = FileType.NONE;
     }
 
     public List<MusicCollection> getCollections() {
@@ -37,6 +51,8 @@ public class MusicCollectionController {
                 collections.add(mc);
             }
         }
+        lastLoadedFile = file;
+        lastLoadedFileType = FileType.BINARY;
     }
 
     public void loadFromTextFile(File file) throws IOException, NumberFormatException {
@@ -56,6 +72,8 @@ public class MusicCollectionController {
                 collections.add(mc);
             }
         }
+        lastLoadedFile = file;
+        lastLoadedFileType = FileType.TEXT;
     }
 
     public void loadFromSerializedFile(File file) throws IOException, ClassNotFoundException {
@@ -70,6 +88,8 @@ public class MusicCollectionController {
                 collections.add(mc);
             }
         }
+        lastLoadedFile = file;
+        lastLoadedFileType = FileType.SERIALIZED;
     }
 
     public void loadFromFormattedFile(File file) throws IOException, java.util.NoSuchElementException {
@@ -92,6 +112,8 @@ public class MusicCollectionController {
                 }
             }
         }
+        lastLoadedFile = file;
+        lastLoadedFileType = FileType.FORMATTED;
     }
 
     public void autoFillDatabase() {
@@ -119,6 +141,9 @@ public class MusicCollectionController {
             }
             collections.add(new Playlist(playlistNames[i], genreIds[i], ratings));
         }
+
+        lastLoadedFile = null;
+        lastLoadedFileType = FileType.NONE;
     }
 
     public void addAlbum(String artist, int year, int[] durations) throws InvalidTrackDataException {
@@ -145,5 +170,85 @@ public class MusicCollectionController {
 
     public MusicCollection get(int index) {
         return collections.get(index);
+    }
+
+    public boolean hasLastLoadedFile() {
+        return lastLoadedFile != null && lastLoadedFileType != FileType.NONE;
+    }
+
+    public File getLastLoadedFile() {
+        return lastLoadedFile;
+    }
+
+    public FileType getLastLoadedFileType() {
+        return lastLoadedFileType;
+    }
+
+    public void saveToLastFile() throws IOException {
+        if (!hasLastLoadedFile()) {
+            throw new IOException("Нет загруженного файла для сохранения");
+        }
+
+        switch (lastLoadedFileType) {
+            case BINARY:
+                saveToBinaryFile(lastLoadedFile);
+                break;
+            case TEXT:
+                saveToTextFile(lastLoadedFile);
+                break;
+            case SERIALIZED:
+                saveToSerializedFile(lastLoadedFile);
+                break;
+            case FORMATTED:
+                saveToFormattedFile(lastLoadedFile);
+                break;
+            default:
+                throw new IOException("Неизвестный тип файла");
+        }
+    }
+
+    public void saveToBinaryFile(File file) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(file);
+                DataOutputStream dos = new DataOutputStream(fos)) {
+            dos.writeInt(collections.size());
+
+            for (MusicCollection collection : collections) {
+                MusicCollectionIO.outputMusicCollection(collection, fos);
+            }
+        }
+    }
+
+    public void saveToTextFile(File file) throws IOException {
+        try (FileWriter fw = new FileWriter(file);
+                BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write(collections.size() + "\n");
+
+            for (MusicCollection collection : collections) {
+                MusicCollectionIO.writeMusicCollection(collection, bw);
+            }
+        }
+    }
+
+    public void saveToSerializedFile(File file) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeInt(collections.size());
+
+            for (MusicCollection collection : collections) {
+                MusicCollectionIO.serializeMusicCollection(collection, oos);
+            }
+        }
+    }
+
+    public void saveToFormattedFile(File file) throws IOException {
+        try (FileWriter fw = new FileWriter(file);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(bw)) {
+            pw.println(collections.size());
+
+            for (MusicCollection collection : collections) {
+                MusicCollectionIO.writeFormatMusicCollection(collection, pw);
+            }
+        }
     }
 }

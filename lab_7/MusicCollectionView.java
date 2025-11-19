@@ -470,6 +470,18 @@ public class MusicCollectionView {
                 controller.addPlaylist(title, genreId, ratings);
             }
             refreshDisplay();
+
+            if (controller.hasLastLoadedFile()) {
+                try {
+                    controller.saveToLastFile();
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Объект добавлен, но не удалось сохранить в файл: " + e.getMessage(),
+                            "Предупреждение",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+
             JOptionPane.showMessageDialog(frame,
                     "Объект успешно добавлен. Всего элементов: " + controller.size(),
                     "Успех",
@@ -513,6 +525,18 @@ public class MusicCollectionView {
 
             controller.removeCollection(number - 1);
             refreshDisplay();
+
+            if (controller.hasLastLoadedFile()) {
+                try {
+                    controller.saveToLastFile();
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Объект удален, но не удалось сохранить в файл: " + e.getMessage(),
+                            "Предупреждение",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+
             JOptionPane.showMessageDialog(frame,
                     "Объект №" + number + " успешно удален. Осталось элементов: " + controller.size(),
                     "Успех",
