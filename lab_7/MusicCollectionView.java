@@ -3,6 +3,7 @@ package lab_7;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -37,8 +39,8 @@ public class MusicCollectionView {
     private JPanel scrollContentPanel;
     private JScrollPane scrollPane;
 
-    public MusicCollectionView(MusicCollectionController controller) {
-        this.controller = controller;
+    public MusicCollectionView(MusicCollectionController musicCollectionController) {
+        controller = musicCollectionController;
         frame = new JFrame();
         initializeGUI();
     }
@@ -58,7 +60,6 @@ public class MusicCollectionView {
     private void createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
-        // Меню "Файл"
         JMenu fileMenu = new JMenu("Файл");
 
         JMenuItem loadBinaryItem = new JMenuItem("Загрузить из бинарного файла (.dat)");
@@ -85,7 +86,6 @@ public class MusicCollectionView {
 
         menuBar.add(fileMenu);
 
-        // Меню "Редактирование"
         JMenu editMenu = new JMenu("Редактирование");
 
         JMenuItem addItem = new JMenuItem("Добавить объект");
@@ -98,7 +98,6 @@ public class MusicCollectionView {
 
         menuBar.add(editMenu);
 
-        // Меню "Внешний вид"
         JMenu lookAndFeelMenu = new JMenu("Внешний вид");
         ButtonGroup lafGroup = new ButtonGroup();
 
@@ -155,23 +154,32 @@ public class MusicCollectionView {
                 BorderFactory.createLineBorder(Color.GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panel.setBackground(Color.WHITE);
-        panel.setPreferredSize(new Dimension(750, 80));
+        panel.setPreferredSize(new Dimension(750, 100));
 
-        // Информация о коллекции
         String type = collection instanceof Album ? "Альбом" : "Плейлист";
         String title = collection.getTitle();
         int identifier = collection.getIdentifier();
         int[] tracksData = collection.getTracksData();
 
-        JLabel infoLabel = new JLabel(String.format(
-                "<html><b>№%d - %s</b><br>" +
-                        "Название: %s<br>" +
-                        "Идентификатор: %d<br>" +
-                        "Количество треков: %d</html>",
-                index + 1, type, title, identifier, tracksData.length));
-        panel.add(infoLabel, BorderLayout.CENTER);
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setOpaque(false);
 
-        // Обработчик клика
+        JLabel headerLabel = new JLabel(String.format("№%d - %s", index + 1, type));
+        headerLabel.setFont(headerLabel.getFont().deriveFont(Font.BOLD));
+        infoPanel.add(headerLabel);
+
+        JLabel titleLabel = new JLabel("Название: " + title);
+        infoPanel.add(titleLabel);
+
+        JLabel idLabel = new JLabel("Идентификатор: " + identifier);
+        infoPanel.add(idLabel);
+
+        JLabel tracksLabel = new JLabel("Количество треков: " + tracksData.length);
+        infoPanel.add(tracksLabel);
+
+        panel.add(infoPanel, BorderLayout.CENTER);
+
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -521,7 +529,6 @@ public class MusicCollectionView {
         try {
             UIManager.setLookAndFeel(lafClassName);
             SwingUtilities.updateComponentTreeUI(frame);
-            frame.pack();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
                     "Ошибка при изменении внешнего вида: " + e.getMessage(),

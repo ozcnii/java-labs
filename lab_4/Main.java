@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,7 +171,7 @@ public class Main {
             int count = ois.readInt();
 
             for (int i = 0; i < count; i++) {
-                MusicCollection mc = (MusicCollection) ois.readObject();
+                MusicCollection mc = MusicCollectionIO.deserializeMusicCollection(ois);
                 collections.add(mc);
             }
         }
@@ -391,11 +392,11 @@ public class Main {
         try {
             System.out.println("Сериализация в файл " + filename + "...");
             try (FileOutputStream fos = new FileOutputStream(filename);
-                    DataOutputStream dos = new DataOutputStream(fos)) {
-                dos.writeInt(collections.size());
+                    ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeInt(collections.size());
 
                 for (MusicCollection collection : collections) {
-                    MusicCollectionIO.serializeMusicCollection(collection, fos);
+                    MusicCollectionIO.serializeMusicCollection(collection, oos);
                 }
             }
             System.out.println("✓ Сериализация завершена.");

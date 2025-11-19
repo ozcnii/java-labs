@@ -28,8 +28,8 @@ public class MusicCollectionController {
 
     public void loadFromBinaryFile(File file) throws IOException {
         collections.clear();
-        try (FileInputStream fis = new FileInputStream(file)) {
-            DataInputStream dis = new DataInputStream(fis);
+        try (FileInputStream fis = new FileInputStream(file);
+                DataInputStream dis = new DataInputStream(fis)) {
             int count = dis.readInt();
 
             for (int i = 0; i < count; i++) {
@@ -66,7 +66,7 @@ public class MusicCollectionController {
             int count = ois.readInt();
 
             for (int i = 0; i < count; i++) {
-                MusicCollection mc = (MusicCollection) ois.readObject();
+                MusicCollection mc = MusicCollectionIO.deserializeMusicCollection(ois);
                 collections.add(mc);
             }
         }
@@ -98,7 +98,6 @@ public class MusicCollectionController {
         Random random = new Random();
 
         collections.clear();
-        // Создаем несколько альбомов и плейлистов
         String[] artists = { "The Beatles", "Pink Floyd", "Led Zeppelin", "Queen", "The Rolling Stones" };
         int[] years = { 1965, 1973, 1971, 1975, 1969 };
 

@@ -1,9 +1,6 @@
 package lab_7;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -73,28 +70,79 @@ public class MusicCollectionIO {
     }
 
     public static void serializeMusicCollection(MusicCollection o, OutputStream out) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        ObjectOutputStream oos;
+        if (out instanceof ObjectOutputStream) {
+            oos = (ObjectOutputStream) out;
+        } else {
+            oos = new ObjectOutputStream(out);
+        }
         oos.writeObject(o);
         oos.flush();
-
-        byte[] data = baos.toByteArray();
-        DataOutputStream dos = new DataOutputStream(out);
-        dos.writeInt(data.length);
-        dos.write(data);
-        dos.flush();
     }
 
     public static MusicCollection deserializeMusicCollection(InputStream in)
             throws IOException, ClassNotFoundException {
-        DataInputStream dis = new DataInputStream(in);
-        int length = dis.readInt();
-        byte[] data = new byte[length];
-        dis.readFully(data);
+        ObjectInputStream ois;
+        boolean needCustomResolver = !(in instanceof ObjectInputStream);
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(data);
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        return (MusicCollection) ois.readObject();
+        if (needCustomResolver) {
+            ois = new ObjectInputStream(in) {
+                @Override
+                protected Class<?> resolveClass(java.io.ObjectStreamClass desc)
+                        throws IOException, ClassNotFoundException {
+                    String name = desc.getName();
+                    // Конвертируем классы из lab_4 в lab_7
+                    if (name.startsWith("lab_4.")) {
+                        String newName = name.replace("lab_4.", "lab_7.");
+                        try {
+                            return Class.forName(newName);
+                        } catch (ClassNotFoundException e) {
+                            // Если класс не найден в lab_7, загружаем оригинальный из lab_4
+                            return super.resolveClass(desc);
+                        }
+                    }
+                    return super.resolveClass(desc);
+                }
+            };
+        } else {
+            ois = (ObjectInputStream) in;
+        }
+
+        try {
+            Object obj = ois.readObject();
+
+            // Если объект из lab_4, конвертируем его в lab_7
+            if (obj.getClass().getName().startsWith("lab_4.")) {
+                return convertFromLab4(obj);
+            }
+
+            return (MusicCollection) obj;
+        } catch (ClassCastException e) {
+            throw new IOException(
+                    "Не удалось загрузить объект. Возможно, файл создан в другой версии программы (lab_4).", e);
+        }
+    }
+
+    private static MusicCollection convertFromLab4(Object obj) throws IOException {
+        try {
+            java.lang.reflect.Method getTitle = obj.getClass().getMethod("getTitle");
+            java.lang.reflect.Method getIdentifier = obj.getClass().getMethod("getIdentifier");
+            java.lang.reflect.Method getTracksData = obj.getClass().getMethod("getTracksData");
+
+            String title = (String) getTitle.invoke(obj);
+            int identifier = (Integer) getIdentifier.invoke(obj);
+            int[] tracksData = (int[]) getTracksData.invoke(obj);
+
+            String className = obj.getClass().getSimpleName();
+            if ("Album".equals(className)) {
+                return new Album(title, identifier, tracksData);
+            } else if ("Playlist".equals(className)) {
+                return new Playlist(title, identifier, tracksData);
+            }
+        } catch (Exception e) {
+            throw new IOException("Ошибка при конвертации объекта из lab_4: " + e.getMessage(), e);
+        }
+        throw new IOException("Неизвестный тип объекта из lab_4: " + obj.getClass().getName());
     }
 
     public static void writeFormatMusicCollection(MusicCollection o, Writer out) throws IOException {
@@ -128,4 +176,3 @@ public class MusicCollectionIO {
         return new Album(title, identifier, data);
     }
 }
-
